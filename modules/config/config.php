@@ -3,6 +3,8 @@ const SUBDOMAIN = 'mazitov979';
 const LOGIN = 'mazitov979@gmail.com';
 const HASH_KEY = '5d96f5f42a39f27b06f9e268cb83f02b18b0cb17';
 
+const ADMIN_ID = '3797932';
+
 const DB_HOST = '127.0.0.1';
 const DB_USER = 'root';
 const DB_PASS = '';
@@ -47,7 +49,8 @@ const CUSTOM_F_ID = [
     'customer_web_site' => '436571',
     'customer_source_page' => '',
     'gauge' => '455201',
-    'lead_date' => '455193'
+    'lead_date' => '455193',
+    'measurement_date' => '455197',
 
 ];
 
@@ -72,6 +75,15 @@ const NOTE_TYPES = [
     'Исходящее смс' => '103'
 ];
 
+const LEAD_STATUS =[
+    '1_БП' => '29884039',
+    '2_БП' => '29884042',
+    '3_БП' => '29884045',
+];
+
+const TASK_TYPES =[
+  'Дата замера' => '1644877',
+];
 
 const FORM_FOCUS = [
     'calc_1' => 'Двухстворчатое окно',
@@ -95,6 +107,7 @@ const LEAD_NOTE = [
     'customer_utm_term' => 'utm_term:',
     'customer_referrer' => 'referrer:',
 ];
+
 
 $GLOBALS['gauges'] = ['Иванов', 'Петров', 'Сидоров'];
 

@@ -3,7 +3,6 @@
 class Task{
     private $data = [];
     private $link;
-    public $Response;
 
     public function __construct(){
         $this->link = 'https://' . SUBDOMAIN . '.amocrm.ru/api/v2/tasks';
@@ -14,7 +13,7 @@ class Task{
      * @return $this
      */
     public function setElementId($id){
-        $this->data['add'][0]['element_id'] = $id;
+        $this->data['element_id'] = $id;
         return $this;
     }
 
@@ -23,7 +22,7 @@ class Task{
      * @return $this
      */
     public function setElementType($name){
-        $this->data['add'][0]['element_type'] = ELEMENT_TYPES[$name];
+        $this->data['element_type'] = ELEMENT_TYPES[$name];
         return $this;
     }
 
@@ -32,7 +31,7 @@ class Task{
      * @return $this
      */
     public function setCompleteTill($timestamp){
-        $this->data['add'][0]['complete_till'] = $timestamp;
+        $this->data['complete_till'] = $timestamp;
         return $this;
     }
 
@@ -41,7 +40,7 @@ class Task{
      * @return $this
      */
     public function setTaskType($typeId){
-        $this->data['add'][0]['task_type'] = $typeId;
+        $this->data['task_type'] = $typeId;
         return $this;
     }
 
@@ -50,13 +49,27 @@ class Task{
      * @return $this
      */
     public function setText($text){
-        $this->data['add'][0]['text'] = $text;
+        $this->data['text'] = $text;
         return $this;
     }
 
-    public function save(){
-        $this->Response = ApiRequest::request($this->link, $this->data);
+    public function add(){
+        $this->data['add'][0] =$this->data;
+        return ApiRequest::request($this->link, $this->data);
+    }
+
+    public function setUpdatedAt($timestamp){
+        $this->data['updated_at'] = $timestamp;
         return $this;
+    }
+    public function setTaskId($id){
+        $this->data['id'] = $id;
+        return $this;
+    }
+
+    public function update(){
+        $this->data['update'][0] =$this->data;
+        return  ApiRequest::request($this->link, $this->data);
     }
 }
 ?>

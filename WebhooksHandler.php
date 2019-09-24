@@ -1,7 +1,7 @@
-<?php 	#mazitov979@gmail.com / 5d96f5f42a39f27b06f9e268cb83f02b18b0cb17
+<?php
 include ("include.php");
 
-class  webhooksHandler{
+class  WebhooksHandler{
 
     public $entity;
     public $action;
@@ -31,33 +31,28 @@ class  webhooksHandler{
         }
 
         $result = mysqli_query($conn,"SELECT hash FROM Webhook_hashes WHERE hash = '$hash'");
-        if (mysqli_num_rows($result) > 0){
-            LogEdit::writeLogs("hash already exist");
+        if (mysqli_num_rows($result) > 0){ #хэш уже существует
+            $conn->close();
             return false;
         }
-        else{
-            LogEdit::writeLogs("hash is unique");
+        else{ #уникальный хэш
             $result = mysqli_query($conn,"INSERT INTO Webhook_hashes (hash) VALUES ('$hash')");
+            $conn->close();
             return true;
         }
     }
 }
 
+AmoAuth::authorize(SUBDOMAIN, LOGIN, HASH_KEY);
 $webhook = new webhooksHandler;
 $fieldsData = $webhook->getFieldsData();
 if ($webhook->isUnique($fieldsData)){
+    LogEdit::writeLogs("hash is unique");
     BusinessProcess::processLead($webhook->action, $fieldsData);
+    LogEdit::writeLogs('------------------------');
 }
-
-
-/*if ($webhook->isUnique($fieldsData)){
-    $link = 'business_process.php';
-    $ch = curl_init($link);
-    $jsonData = $fieldsData;
-    $jsonDataEncoded = json_encode($jsonData);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    $result = curl_exec($ch);
-}*/
+else{
+    LogEdit::writeLogs("hash already exist");
+    LogEdit::writeLogs('------------------------');
+}
 

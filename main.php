@@ -1,4 +1,4 @@
-<?php 	#mazitov979@gmail.com / 5d96f5f42a39f27b06f9e268cb83f02b18b0cb17
+<?php
 include ("include.php");
 
 AmoAuth::authorize(SUBDOMAIN, LOGIN, HASH_KEY);
@@ -26,8 +26,8 @@ if (is_null($contact_id)) {
         $contact = (new Contact())
             ->setName($customer_name)
             ->setCustomFields((new SetFields())->setContactFields($contact_custom_fields)->data)
-            ->save();
-        $contact_id = $contact->Response[0]['id'];
+            ->add();
+        $contact_id = $contact[0]['id'];
         LogEdit::writeLogs('ID созданного контакта: '.$contact_id);
     }
 }
@@ -52,13 +52,13 @@ $lead_custom_fields = array_filter([
     'customer_web_site' => OPTIONS['web_site'][$data["form"]["page"]],
 ]);
 #Создаем сделку и получаем её id.
-$lead = (new Lead('add'))
+$lead = (new Lead())
     ->setName('Заявка с сайта '.$data["form"]["page"].' от '.date('Y-m-d'))
     ->setResponsibleUserId('3799126')
     ->setContactsId($contact_id)
     ->setCustomFields((new SetFields())->setLeadFields($lead_custom_fields)->data)
-    ->save();
-$lead_id = $lead->Response[0]['id'];
+    ->add();
+$lead_id = $lead[0]['id'];
 LogEdit::writeLogs('ID созданной сделки: '.$lead_id);
 
 //Создаём задачу для сделки.
@@ -68,7 +68,7 @@ $task = (new Task())
     ->setCompleteTill(time() + 60 * 15)
     ->setTaskType('1644175')
     ->setText('Поступила заявка с сайта '.$data["form"]["page"].' 1) Необходимо связаться с клиентом. 2) Затем перевести сделку на следующий этап.')
-    ->save();
+    ->add();
 
 LogEdit::writeLogs($data['form']['id']);
 //Добавляем примечание в сделку.
@@ -77,7 +77,7 @@ $note = (new Note())
     ->setElementType('lead')
     ->setNoteType('Обычное примечание');
 $note->setText($note->noteBuilder($data))
-    ->save();
+    ->add();
 
 LogEdit::writeLogs("-------------");
 ##############################################################################################################

@@ -3,7 +3,6 @@
 class Note{
     private $data = [];
     private $link;
-    public $Response;
 
     public function __construct(){
         $this->link = 'https://' . SUBDOMAIN . '.amocrm.ru/api/v2/notes';
@@ -14,7 +13,7 @@ class Note{
      * @return $this
      */
     public function setElementId($id){
-        $this->data['add'][0]['element_id'] = $id;
+        $this->data['element_id'] = $id;
         return $this;
     }
 
@@ -23,7 +22,7 @@ class Note{
      * @return $this
      */
     public function setElementType($name){
-        $this->data['add'][0]['element_type'] = ELEMENT_TYPES[$name];
+        $this->data['element_type'] = ELEMENT_TYPES[$name];
         return $this;
     }
 
@@ -32,7 +31,7 @@ class Note{
      * @return $this
      */
     public function setNoteType($type){
-        $this->data['add'][0]['note_type'] = NOTE_TYPES[$type];
+        $this->data['note_type'] = NOTE_TYPES[$type];
         return $this;
     }
 
@@ -41,13 +40,18 @@ class Note{
      * @return $this
      */
     public function setText($text){
-        $this->data['add'][0]['text'] = $text;
+        $this->data['text'] = $text;
         return $this;
     }
 
-    public function save(){
-        $this->Response = ApiRequest::request($this->link, $this->data);
-        return $this;
+    public function add(){
+        $this->data['add'][0] =$this->data;
+        return ApiRequest::request($this->link, $this->data);
+    }
+
+    public function update(){
+        $this->data['update'][0] =$this->data;
+        return  ApiRequest::request($this->link, $this->data);
     }
 
     public function noteBuilder($data){
